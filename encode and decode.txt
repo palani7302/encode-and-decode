@@ -1,0 +1,71 @@
+#Importing Libraries
+from tkinter import *
+import base64
+
+#Initialize Window
+root = Tk()
+root.geometry('500x500')
+root.resizable(1,1)
+root.title("GCEB - Message Encode and Decode")
+Label(root, text ='ENCODE DECODE', font = 'arial 20 bold').pack(side=TOP)
+Label(root, text ='@gceb - ece', font = 'arial 10 bold').pack(side =BOTTOM)
+
+#Define Variables
+Text = StringVar()
+private_key = StringVar()
+mode = StringVar()
+Result = StringVar()
+
+#Function to Encode
+def Encode(key,message):
+    enc=[]
+    for i in range(len(message)):
+        key_c = key[i % len(key)]
+        enc.append(chr((ord(message[i]) + ord(key_c)) % 256))
+    return base64.urlsafe_b64encode("".join(enc).encode()).decode()
+
+#Function to Decode
+def Decode(key,message):
+    dec=[]
+    message = base64.urlsafe_b64decode(message).decode()
+    for i in range(len(message)):
+        key_c = key[i % len(key)]
+        dec.append(chr((256 + ord(message[i])- ord(key_c)) % 256))
+    return ("".join(dec)) 
+
+#Function to set Mode
+def Mode():
+    if(mode.get() == 'e'):
+        Result.set(Encode(private_key.get(), Text.get()))
+    elif(mode.get() == 'd'):
+        Result.set(Decode(private_key.get(), Text.get()))
+    else:
+        Result.set('Invalid Mode')
+        
+#Function to Exit Window
+def Exit():
+    root.destroy()
+    
+#Function to Reset Window
+def Reset():
+    Text.set("")
+    private_key.set("")
+    mode.set("")
+    Result.set("")
+
+#Labels and Buttons
+Label(root, font= 'arial 20 bold', text='Message').place(x= 300,y=100) #Message Label
+Entry(root, font = 'arial 15', textvariable = Text, width=30,bg = 'white').place(x=700, y = 100) #Input Message
+
+Label(root, font = 'arial 20 bold', text ='Key').place(x=300, y = 200) #Key Label
+Entry(root, font = 'arial 15', textvariable = private_key ,width=30, bg ='white').place(x=700, y = 200) #Input Key
+
+Label(root, font = 'arial 20 bold', text ='Mode(e-encode, d-decode)').place(x=300, y = 300) #Mode Label
+Entry(root, font = 'arial 15', textvariable = mode ,width=30, bg= 'white').place(x=700, y = 300) #Input Mode
+
+Button(root, font = 'arial 15 bold', text = 'Result'  ,padx =4,bg ='LimeGreen' ,command = Mode).place(x=300, y = 400) #Result Button
+Entry(root, font = 'arial 15 bold', textvariable = Result,width=30, bg ='white').place(x=700, y = 400) #Output result
+Button(root, font = 'arial 15 bold' ,text ='Reset' ,width =6, command = Reset,bg = 'LightBlue', padx=2).place(x=300, y = 500) #Reset Button
+Button(root, font = 'arial 15 bold' ,text= 'Exit' , width = 6, command = Exit,bg = 'Red', padx=2, pady=2).place(x=945, y = 500) #Exit Button
+
+root.mainloop()     
