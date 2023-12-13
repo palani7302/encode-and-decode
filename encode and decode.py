@@ -6,7 +6,7 @@ import base64
 root = Tk()
 root.geometry('500x500')
 root.resizable(1,1)
-root.title("GCEB - Message Encode")
+root.title("GCEB - Message Encode and Decode")
 Label(root, text ='ENCODE DECODE', font = 'arial 20 bold').pack(side=TOP)
 Label(root, text ='@gceb - ece', font = 'arial 10 bold').pack(side =BOTTOM)
 
